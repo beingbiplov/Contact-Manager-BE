@@ -1,7 +1,11 @@
 import StatusCodes from "http-status-codes";
 
 import UserModel from "../models/UserModel";
-import { UserToInsertInterface, UserToReturnInterface } from "../domain/User";
+import {
+  UserToInsertInterface,
+  UserToReturnInterface,
+  UserToUpdateInterface,
+} from "../domain/User";
 import { generatePasswordHash } from "../utils/passwordUtil";
 import CustomError from "../misc/CustomError";
 import Success from "../domain/Success";
@@ -70,5 +74,52 @@ export const createUser = async (
   return {
     data: newUser,
     message: "User created successfully.",
+  };
+};
+
+/**
+ * Update an existing user.
+ * @param {UserInterface} user
+ * @returns {Promise<Success<UserToReturnInterface>>}
+ */
+export const updateUser = async (
+  user: UserToUpdateInterface
+): Promise<Success<UserToReturnInterface | void>> => {
+  const { password } = user;
+  let userToUpdate = { ...user };
+
+  if (password) {
+    const passwordHash = await generatePasswordHash(password);
+    userToUpdate = { ...user, password: passwordHash };
+  }
+
+  const updatedUser = await UserModel.updateUser(userToUpdate);
+
+  if (!updatedUser) {
+    throw new CustomError("User does not exist.", StatusCodes.BAD_REQUEST);
+  }
+
+  return {
+    data: updatedUser,
+    message: "User updated successfully",
+  };
+};
+
+/**
+ * Delete an existing user.
+ * @param {number} id
+ * @returns {Promise<Success<>>}
+ */
+export const deleteUser = async (
+  id: number
+): Promise<Success<UserToReturnInterface>> => {
+  const deletedUser = await UserModel.deleteUser(id);
+
+  if (!deletedUser) {
+    throw new CustomError("User does not exist.", StatusCodes.BAD_REQUEST);
+  }
+
+  return {
+    message: "User deleted successfully",
   };
 };

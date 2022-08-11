@@ -7,3 +7,4 @@ export default interface UserInterface {
 
 export type UserToInsertInterface = Omit<UserInterface, "id">;
 export type UserToReturnInterface = Omit<UserInterface, "password">;
+export type UserToUpdateInterface = Omit<UserInterface, "email">;

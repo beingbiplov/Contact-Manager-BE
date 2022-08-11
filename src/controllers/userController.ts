@@ -58,3 +58,41 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
     .then((data) => res.json(data))
     .catch((err) => next(err));
 };
+
+/**
+ * Update an existing user.
+ * @param {Request} req
+ * @param {Response} res
+ */
+export const updateUser = (req: Request, res: Response, next: NextFunction) => {
+  const id: number = +req.params.id;
+
+  const { name, password } = req.body;
+
+  if (!password && !name) {
+    throw new CustomError("data not provided", StatusCodes.BAD_REQUEST);
+  }
+
+  userService
+    .updateUser({
+      id,
+      name,
+      password,
+    })
+    .then((data) => res.json(data))
+    .catch((err) => next(err));
+};
+
+/**
+ * Delete an existing user.
+ * @param {Request} req
+ * @param {Response} res
+ */
+export const deleteUser = (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params;
+
+  userService
+    .deleteUser(+id)
+    .then((data) => res.json(data))
+    .catch((err) => next(err));
+};

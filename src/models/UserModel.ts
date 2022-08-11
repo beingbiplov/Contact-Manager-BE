@@ -1,5 +1,9 @@
 import db from "../db/db";
-import { UserToInsertInterface, UserToReturnInterface } from "../domain/User";
+import {
+  UserToInsertInterface,
+  UserToReturnInterface,
+  UserToUpdateInterface,
+} from "../domain/User";
 
 class UserModel {
   private static table = "user_account";
@@ -37,6 +41,23 @@ class UserModel {
     const newUser = db(UserModel.table).insert(user, UserModel.toReturnFields);
 
     return newUser;
+  }
+
+  public static async updateUser(
+    user: UserToUpdateInterface
+  ): Promise<UserToReturnInterface> {
+    const [updatedUser] = await db(UserModel.table)
+      .where({ id: user.id })
+      .update(user)
+      .returning(UserModel.toReturnFields);
+
+    return updatedUser;
+  }
+
+  public static async deleteUser(id: number): Promise<number> {
+    const deletedUser = await db(UserModel.table).where({ id: id }).delete();
+
+    return deletedUser;
   }
 }
 
