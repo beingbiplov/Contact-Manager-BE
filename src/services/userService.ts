@@ -7,6 +7,39 @@ import CustomError from "../misc/CustomError";
 import Success from "../domain/Success";
 
 /**
+ * Get all users.
+ * @returns {Promise<Success<UserToReturnInterface>>}
+ */
+export const getUsers = async (): Promise<Success<UserToReturnInterface>> => {
+  const users = await UserModel.getUsers();
+
+  return {
+    data: users,
+    message: "Users fetched successfully",
+  };
+};
+
+/**
+ * Get a single user by id.
+ * @param {number} id
+ * @returns {Promise<Success<UserToReturnInterface>>}
+ */
+export const getUserById = async (
+  id: number
+): Promise<Success<UserToReturnInterface>> => {
+  const user = await UserModel.getUserById(id);
+
+  if (!user) {
+    throw new CustomError("Invalid Id", StatusCodes.NOT_FOUND);
+  }
+
+  return {
+    data: user,
+    message: "User fetched successfully",
+  };
+};
+
+/**
  * Create a new user.
  * @param {UserToInsertInterface} user
  * @returns {Promise<Success<UserToReturnInterface>>}
