@@ -1,5 +1,5 @@
 import db from "../db/db";
-import {
+import UserInterface, {
   UserToInsertInterface,
   UserToReturnInterface,
   UserToUpdateInterface,
@@ -24,12 +24,10 @@ class UserModel {
     return user;
   }
 
-  public static async getUserByEmail(
-    email: string
-  ): Promise<UserToReturnInterface> {
+  public static async getUserByEmail(email: string): Promise<UserInterface> {
     const user = await db(UserModel.table)
       .where({ email: email })
-      .select(UserModel.toReturnFields)
+      .select()
       .first();
 
     return user;

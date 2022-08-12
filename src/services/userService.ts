@@ -6,7 +6,7 @@ import {
   UserToReturnInterface,
   UserToUpdateInterface,
 } from "../domain/User";
-import { generatePasswordHash } from "../utils/passwordUtil";
+import { generatePasswordHash } from "../utils/passwordUtils";
 import CustomError from "../misc/CustomError";
 import Success from "../domain/Success";
 

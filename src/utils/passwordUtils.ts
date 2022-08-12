@@ -8,3 +8,11 @@ export const generatePasswordHash = async (
 
   return passwordHash;
 };
+
+export const checkPasswordMatch = async (
+  hashPassword: string,
+  password: string
+): Promise<boolean> => {
+  const isPasswordCorrect = await bcrypt.compare(password, hashPassword);
+  return isPasswordCorrect;
+};
