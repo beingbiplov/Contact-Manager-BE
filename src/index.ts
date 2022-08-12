@@ -5,6 +5,7 @@ import express, { Request, Response, Application } from "express";
 import { notFound } from "./middlewares/notFound";
 import { errorHandler } from "./middlewares/errorHandler";
 import logger from "./misc/logger";
+import appRoutes from "./routes/index";
 
 dotenv.config();
 
@@ -17,6 +18,8 @@ app.use(cors());
 app.get("/", (req: Request, res: Response) => {
   res.send("API is running....");
 });
+
+app.use("/api", appRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
