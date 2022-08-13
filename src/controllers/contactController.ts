@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import CustomError from "../misc/CustomError";
 import { AuthRequest } from "../domain/Authenticate";
 import * as contactService from "../services/contactService";
+import { noDataErrMsg, signInRequiredMsg } from "../constants/common";
 
 /**
  * Get all users.
@@ -18,10 +19,7 @@ export const getContacts = (
   const user_id = req.authUser;
 
   if (!user_id) {
-    throw new CustomError(
-      "user needs to be signed in",
-      StatusCodes.UNAUTHORIZED
-    );
+    throw new CustomError(signInRequiredMsg, StatusCodes.UNAUTHORIZED);
   }
   contactService
     .getContacts(user_id)
@@ -43,10 +41,7 @@ export const getContactById = (
   const user_id = req.authUser;
 
   if (!user_id) {
-    throw new CustomError(
-      "user needs to be signed in",
-      StatusCodes.UNAUTHORIZED
-    );
+    throw new CustomError(signInRequiredMsg, StatusCodes.UNAUTHORIZED);
   }
 
   contactService
@@ -70,17 +65,11 @@ export const createContact = (
   const user_id = req.authUser;
 
   if (!name || !phone) {
-    throw new CustomError(
-      "name and phone fields are required",
-      StatusCodes.BAD_REQUEST
-    );
+    throw new CustomError(noDataErrMsg, StatusCodes.BAD_REQUEST);
   }
 
   if (!user_id) {
-    throw new CustomError(
-      "user needs to be signed in",
-      StatusCodes.UNAUTHORIZED
-    );
+    throw new CustomError(signInRequiredMsg, StatusCodes.UNAUTHORIZED);
   }
 
   contactService
@@ -98,7 +87,7 @@ export const createContact = (
 };
 
 /**
- * Update an existing user.
+ * Update an existing contact.
  * @param {Request} req
  * @param {Response} res
  */
@@ -114,14 +103,11 @@ export const updateContact = (
     req.body;
 
   if (!name && !email && !is_favorite && !picture && !address && !phone) {
-    throw new CustomError("data not provided", StatusCodes.BAD_REQUEST);
+    throw new CustomError(noDataErrMsg, StatusCodes.BAD_REQUEST);
   }
 
   if (!currentUser) {
-    throw new CustomError(
-      "user needs to be signed in",
-      StatusCodes.UNAUTHORIZED
-    );
+    throw new CustomError(signInRequiredMsg, StatusCodes.UNAUTHORIZED);
   }
 
   contactService
@@ -153,10 +139,7 @@ export const deleteContact = (
   const user_id = req.authUser;
 
   if (!user_id) {
-    throw new CustomError(
-      "user needs to be signed in",
-      StatusCodes.UNAUTHORIZED
-    );
+    throw new CustomError(signInRequiredMsg, StatusCodes.UNAUTHORIZED);
   }
 
   contactService

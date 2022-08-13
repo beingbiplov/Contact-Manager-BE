@@ -7,7 +7,10 @@ import ContactInterface, {
 } from "../domain/Contact";
 import Success from "../domain/Success";
 import CustomError from "../misc/CustomError";
-import { forbiddenErrMsg } from "../constants/common";
+import {
+  forbiddenErrMsg,
+  resourceFetchedSuccessMsg,
+} from "../constants/common";
 
 /**
  * Get all contacts.
@@ -20,7 +23,7 @@ export const getContacts = async (
 
   return {
     data: contacts,
-    message: "Users fetched successfully",
+    message: resourceFetchedSuccessMsg,
   };
 };
 
@@ -41,7 +44,7 @@ export const getContactById = async (
 
   return {
     data: contact,
-    message: "User fetched successfully",
+    message: resourceFetchedSuccessMsg,
   };
 };
 

@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import * as authService from "../services/authService";
 import CustomError from "../misc/CustomError";
 import { AuthRequest } from "../domain/Authenticate";
+import { signInRequiredMsg } from "../constants/common";
 
 export const authenticateUser = (
   req: Request,
@@ -46,7 +47,7 @@ export const deleteRefreshToken = (
   const userId = req.authUser;
 
   if (!userId) {
-    throw new CustomError("User id required", StatusCodes.BAD_REQUEST);
+    throw new CustomError(signInRequiredMsg, StatusCodes.BAD_REQUEST);
   }
 
   authService
