@@ -7,6 +7,43 @@ import ContactInterface, {
 } from "../domain/Contact";
 import Success from "../domain/Success";
 import CustomError from "../misc/CustomError";
+import { forbiddenErrMsg } from "../constants/common";
+
+/**
+ * Get all contacts.
+ * @returns {Promise<Success<ContactInterface>>}
+ */
+export const getContacts = async (
+  user_id: number
+): Promise<Success<ContactInterface>> => {
+  const contacts = await ContactModel.getContacts(user_id);
+
+  return {
+    data: contacts,
+    message: "Users fetched successfully",
+  };
+};
+
+/**
+ * Get a single contact by id.
+ * @param {number, number} user_id, contact_id
+ * @returns {Promise<Success<ContactInterface>>}
+ */
+export const getContactById = async (
+  user_id: number,
+  contact_id: number
+): Promise<Success<ContactInterface>> => {
+  const contact = await ContactModel.getContactById(contact_id);
+
+  if (!contact || user_id != contact.user_id) {
+    throw new CustomError(forbiddenErrMsg, StatusCodes.FORBIDDEN);
+  }
+
+  return {
+    data: contact,
+    message: "User fetched successfully",
+  };
+};
 
 /**
  * Create a new contact.
@@ -49,11 +86,8 @@ export const deleteContact = async (
 ): Promise<Success<ContactInterface>> => {
   const contactOwner = await ContactModel.getContactOwner(contact_id);
 
-  if (user_id != contactOwner) {
-    throw new CustomError(
-      "You do not have access to perform this action",
-      StatusCodes.FORBIDDEN
-    );
+  if (!contactOwner || user_id != contactOwner.user_id) {
+    throw new CustomError(forbiddenErrMsg, StatusCodes.FORBIDDEN);
   }
 
   const deletedContact = await ContactModel.deleteContact(contact_id);
