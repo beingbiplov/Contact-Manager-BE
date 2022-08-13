@@ -98,6 +98,48 @@ export const createContact = (
 };
 
 /**
+ * Update an existing user.
+ * @param {Request} req
+ * @param {Response} res
+ */
+export const updateContact = (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const contact_id: number = +req.params.id;
+  const currentUser = req.authUser;
+
+  const { name, email, is_favorite, picture, address, phone, user_id } =
+    req.body;
+
+  if (!name && !email && !is_favorite && !picture && !address && !phone) {
+    throw new CustomError("data not provided", StatusCodes.BAD_REQUEST);
+  }
+
+  if (!currentUser) {
+    throw new CustomError(
+      "user needs to be signed in",
+      StatusCodes.UNAUTHORIZED
+    );
+  }
+
+  contactService
+    .updateContact(currentUser, {
+      contact_id,
+      name,
+      email,
+      is_favorite,
+      picture,
+      address,
+      phone,
+      user_id,
+    })
+    .then((data) => res.json(data))
+    .catch((err) => next(err));
+};
+
+/**
  * Delete an existing contact.
  * @param {Request} req
  * @param {Response} res

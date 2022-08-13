@@ -1,5 +1,6 @@
 import db from "../db/db";
 import {
+  PhoneInterface,
   PhoneToInsertInterface,
   PhoneToReturnInterface,
 } from "../domain/Contact";
@@ -17,6 +18,28 @@ class PhoneModel {
     );
 
     return newPhone;
+  }
+
+  public static async updatePhone(
+    phone: PhoneInterface
+  ): Promise<PhoneInterface> {
+    const [updatedPhone] = await db(PhoneModel.table)
+      .where({ phone_id: phone.phone_id })
+      .update(phone)
+      .returning(PhoneModel.toReturnFields);
+
+    return updatedPhone;
+  }
+
+  public static async getPhoneOwner(
+    phone_id: number
+  ): Promise<PhoneToReturnInterface> {
+    const contactOwner = await db(PhoneModel.table)
+      .where({ phone_id: phone_id })
+      .select(["contact_table_id"])
+      .first();
+
+    return contactOwner;
   }
 }
 

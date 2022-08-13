@@ -1,5 +1,8 @@
 import db from "../db/db";
-import ContactInterface, { ContactToInsertInterface } from "../domain/Contact";
+import ContactInterface, {
+  ContactToInsertInterface,
+  ContactToUpdateInterface,
+} from "../domain/Contact";
 
 class ContactModel {
   private static table = "contact";
@@ -66,6 +69,17 @@ class ContactModel {
     );
 
     return newContact;
+  }
+
+  public static async updateContact(
+    contact: ContactToUpdateInterface
+  ): Promise<ContactInterface> {
+    const [updatedContact] = await db(ContactModel.table)
+      .where({ contact_id: contact.contact_id })
+      .update(contact)
+      .returning(ContactModel.toReturnFields);
+
+    return updatedContact;
   }
 
   public static async deleteContact(contact_id: number): Promise<number> {

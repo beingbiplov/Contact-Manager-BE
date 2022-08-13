@@ -24,5 +24,8 @@ export type ContactToInsertInterface = Omit<
   ContactInterface,
   "contact_id" | "phone"
 >;
-export type ContactToUpdateInterface = Omit<ContactInterface, "user_id">;
+export type ContactToUpdateInterface = Omit<
+  ContactInterface,
+  "user_id" | "phone"
+>;
 export type PhoneToInsertInterface = Omit<PhoneToReturnInterface, "phone_id">;
