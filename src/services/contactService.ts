@@ -61,6 +61,7 @@ export const createContact = async (
         contact_table_id: data[0].contact_id,
         ...phone,
       }).catch((err) => {
+        ContactModel.deleteContact(data[0].contact_id);
         throw new CustomError(err, StatusCodes.INTERNAL_SERVER_ERROR);
       });
       return { phoneData: newPhone[0], ...data[0] };
