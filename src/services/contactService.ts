@@ -125,6 +125,24 @@ export const updateContact = async (
     throw new CustomError(forbiddenErrMsg, StatusCodes.FORBIDDEN);
   }
 
+  if (contactData.picture) {
+    try {
+      logger.info("uploading image");
+      const uploadRes = await cloudinary.uploader.upload(contactData.picture, {
+        upload_preset: "contact-manager",
+      });
+      const { url } = uploadRes;
+
+      contactData.picture = url;
+      logger.info("Upload successful");
+    } catch (error) {
+      throw new CustomError(
+        "Error uploading pic",
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
   const updatedContact = await ContactModel.updateContact(contactData).then(
     async (data) => {
       if (phone) {
