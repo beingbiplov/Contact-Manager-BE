@@ -6,10 +6,12 @@ import {
   getContacts,
   getContactById,
   updateContact,
+  getFavContacts,
 } from "../controllers/contactController";
 
 const router = Router();
 
+router.get("/favorite", getFavContacts);
 router.get("/", getContacts);
 router.get("/:id", getContactById);
 router.post("/", createContact);

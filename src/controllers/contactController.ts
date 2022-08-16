@@ -147,3 +147,25 @@ export const deleteContact = (
     .then((data) => res.json(data))
     .catch((err) => next(err));
 };
+
+/**
+ * Get fav users.
+ * @param {Request} req
+ * @param {Response} res
+ */
+export const getFavContacts = (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const user_id = req.authUser;
+
+  if (!user_id) {
+    throw new CustomError(signInRequiredMsg, StatusCodes.UNAUTHORIZED);
+  }
+
+  contactService
+    .getFavContacts(user_id)
+    .then((data) => res.json(data))
+    .catch((err) => next(err));
+};
