@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import StatusCodes from "http-status-codes";
+import { noDataErrMsg } from "../constants/common";
 
 import CustomError from "../misc/CustomError";
 import * as userService from "../services/userService";
@@ -43,10 +44,7 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
-    throw new CustomError(
-      "name, email and password are required",
-      StatusCodes.BAD_REQUEST
-    );
+    throw new CustomError(noDataErrMsg, StatusCodes.BAD_REQUEST);
   }
 
   userService
@@ -70,7 +68,7 @@ export const updateUser = (req: Request, res: Response, next: NextFunction) => {
   const { name, password } = req.body;
 
   if (!password && !name) {
-    throw new CustomError("data not provided", StatusCodes.BAD_REQUEST);
+    throw new CustomError(noDataErrMsg, StatusCodes.BAD_REQUEST);
   }
 
   userService

@@ -9,6 +9,7 @@ import {
 import { generatePasswordHash } from "../utils/passwordUtils";
 import CustomError from "../misc/CustomError";
 import Success from "../domain/Success";
+import { resourceFetchedSuccessMsg } from "../constants/common";
 
 /**
  * Get all users.
@@ -19,7 +20,7 @@ export const getUsers = async (): Promise<Success<UserToReturnInterface>> => {
 
   return {
     data: users,
-    message: "Users fetched successfully",
+    message: resourceFetchedSuccessMsg,
   };
 };
 
@@ -39,7 +40,7 @@ export const getUserById = async (
 
   return {
     data: user,
-    message: "User fetched successfully",
+    message: resourceFetchedSuccessMsg,
   };
 };
 
