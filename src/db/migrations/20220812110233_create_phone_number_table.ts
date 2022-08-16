@@ -3,7 +3,7 @@ import { Knex } from "knex";
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable("phone_number", (table) => {
     table.increments("phone_id");
-    table.integer("phone_number").notNullable().unsigned();
+    table.bigInteger("phone_number").notNullable().unsigned();
     table
       .enu("label", ["cell", "home", "work", "other"])
       .defaultTo("cell")
