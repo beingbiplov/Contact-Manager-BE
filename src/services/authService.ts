@@ -70,7 +70,7 @@ export const getAccessToken = async (
 
   const userId = verifyAccessToken(existingToken.refresh_token);
 
-  const access_token = createAccessToken({ userId });
+  const access_token = createAccessToken(userId);
 
   return {
     data: access_token,
