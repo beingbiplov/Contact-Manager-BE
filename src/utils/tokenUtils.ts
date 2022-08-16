@@ -19,10 +19,10 @@ export const createRefreshToken = (data: any): string => {
 };
 
 export const verifyAccessToken = (data: string): number => {
-  const { userId } = jwt.verify(
-    data,
-    process.env.JWT_REFRESH_SECRET as string
-  ) as { userId: number };
+  const jwtRes = jwt.verify(data, process.env.JWT_REFRESH_SECRET as string) as {
+    data: number;
+  };
+  const userId = jwtRes.data;
 
   return userId;
 };

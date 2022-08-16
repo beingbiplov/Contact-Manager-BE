@@ -11,6 +11,8 @@ import {
   forbiddenErrMsg,
   resourceFetchedSuccessMsg,
 } from "../constants/common";
+import logger from "../misc/logger";
+import cloudinary from "../utils/cloudinaryUtils";
 
 /**
  * Get all contacts.
@@ -57,6 +59,24 @@ export const createContact = async (
   contact: FullContactToInsertInterface
 ): Promise<Success<ContactInterface>> => {
   const { phone, ...contactData } = contact;
+
+  if (contactData.picture) {
+    try {
+      logger.info("uploading image");
+      const uploadRes = await cloudinary.uploader.upload(contactData.picture, {
+        upload_preset: "contact-manager",
+      });
+      const { url } = uploadRes;
+
+      contactData.picture = url;
+      logger.info("Upload successful");
+    } catch (error) {
+      throw new CustomError(
+        "Error uploading pic",
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
 
   const newContact = await ContactModel.createContact(contactData)
     .then(async (data) => {
