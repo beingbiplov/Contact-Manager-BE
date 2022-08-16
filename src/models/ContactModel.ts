@@ -100,6 +100,28 @@ class ContactModel {
 
     return contactOwner;
   }
+
+  public static async getFavContacts(
+    user_id: number
+  ): Promise<ContactInterface[]> {
+    const contacts = await db(ContactModel.table)
+      .where({ "contact.user_id": user_id, "contact.is_favorite": true })
+      .select(
+        "contact.*",
+        "phone_number.phone_id",
+        "phone_number.phone_number",
+        "phone_number.label"
+      )
+      .leftJoin(
+        "phone_number",
+        "contact.contact_id",
+        "=",
+        "phone_number.contact_table_id"
+      )
+      .orderBy("name", "asc");
+
+    return contacts;
+  }
 }
 
 export default ContactModel;

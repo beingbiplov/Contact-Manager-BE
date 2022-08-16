@@ -193,3 +193,18 @@ export const deleteContact = async (
     message: "Contact deleted successfully",
   };
 };
+
+/**
+ * Get fav contacts.
+ * @returns {Promise<Success<ContactInterface>>}
+ */
+export const getFavContacts = async (
+  user_id: number
+): Promise<Success<ContactInterface>> => {
+  const contacts = await ContactModel.getFavContacts(user_id);
+
+  return {
+    data: contacts,
+    message: resourceFetchedSuccessMsg,
+  };
+};
