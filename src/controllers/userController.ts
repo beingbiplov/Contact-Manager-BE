@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import StatusCodes from "http-status-codes";
-import { noDataErrMsg } from "../constants/common";
+import { forbiddenErrMsg, noDataErrMsg } from "../constants/common";
 
 import CustomError from "../misc/CustomError";
 import * as userService from "../services/userService";
+import { AuthRequest } from "../domain/Authenticate";
 
 /**
  * Get all users.
@@ -23,14 +24,19 @@ export const getUsers = (req: Request, res: Response, next: NextFunction) => {
  * @param {Response} res
  */
 export const getUserById = (
-  req: Request,
+  req: AuthRequest,
   res: Response,
   next: NextFunction
 ) => {
-  const { id } = req.params;
+  const id: number = +req.params.id;
+  const user_id = req.authUser;
+
+  if (user_id !== id) {
+    throw new CustomError(forbiddenErrMsg, StatusCodes.UNAUTHORIZED);
+  }
 
   userService
-    .getUserById(+id)
+    .getUserById(id)
     .then((data) => res.json(data))
     .catch((err) => next(err));
 };

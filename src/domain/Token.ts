@@ -1,6 +1,7 @@
 export default interface TokenInterface {
   accessToken: string;
   refreshToken: string;
+  userData?: {};
 }
 
 export interface RefreshTokenInterface {
