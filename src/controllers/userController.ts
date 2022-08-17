@@ -7,18 +7,6 @@ import * as userService from "../services/userService";
 import { AuthRequest } from "../domain/Authenticate";
 
 /**
- * Get all users.
- * @param {Request} req
- * @param {Response} res
- */
-export const getUsers = (req: Request, res: Response, next: NextFunction) => {
-  userService
-    .getUsers()
-    .then((data) => res.json(data))
-    .catch((err) => next(err));
-};
-
-/**
  * Get a single user by id.
  * @param {Request} req
  * @param {Response} res
@@ -83,20 +71,6 @@ export const updateUser = (req: Request, res: Response, next: NextFunction) => {
       name,
       password,
     })
-    .then((data) => res.json(data))
-    .catch((err) => next(err));
-};
-
-/**
- * Delete an existing user.
- * @param {Request} req
- * @param {Response} res
- */
-export const deleteUser = (req: Request, res: Response, next: NextFunction) => {
-  const { id } = req.params;
-
-  userService
-    .deleteUser(+id)
     .then((data) => res.json(data))
     .catch((err) => next(err));
 };

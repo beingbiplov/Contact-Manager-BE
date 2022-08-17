@@ -12,19 +12,6 @@ import Success from "../domain/Success";
 import { resourceFetchedSuccessMsg } from "../constants/common";
 
 /**
- * Get all users.
- * @returns {Promise<Success<UserToReturnInterface>>}
- */
-export const getUsers = async (): Promise<Success<UserToReturnInterface>> => {
-  const users = await UserModel.getUsers();
-
-  return {
-    data: users,
-    message: resourceFetchedSuccessMsg,
-  };
-};
-
-/**
  * Get a single user by id.
  * @param {number} id
  * @returns {Promise<Success<UserToReturnInterface>>}
@@ -103,24 +90,5 @@ export const updateUser = async (
   return {
     data: updatedUser,
     message: "User updated successfully",
-  };
-};
-
-/**
- * Delete an existing user.
- * @param {number} id
- * @returns {Promise<Success<>>}
- */
-export const deleteUser = async (
-  id: number
-): Promise<Success<UserToReturnInterface>> => {
-  const deletedUser = await UserModel.deleteUser(id);
-
-  if (!deletedUser) {
-    throw new CustomError("User does not exist.", StatusCodes.BAD_REQUEST);
-  }
-
-  return {
-    message: "User deleted successfully",
   };
 };

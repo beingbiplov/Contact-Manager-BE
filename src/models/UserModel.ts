@@ -9,12 +9,6 @@ class UserModel {
   private static table = "user_account";
   private static toReturnFields = ["id", "name", "email"];
 
-  public static async getUsers(): Promise<UserToReturnInterface[]> {
-    const users = await db(UserModel.table).select(UserModel.toReturnFields);
-
-    return users;
-  }
-
   public static async getUserById(id: number): Promise<UserToReturnInterface> {
     const user = await db(UserModel.table)
       .where({ id: id })
@@ -50,12 +44,6 @@ class UserModel {
       .returning(UserModel.toReturnFields);
 
     return updatedUser;
-  }
-
-  public static async deleteUser(id: number): Promise<number> {
-    const deletedUser = await db(UserModel.table).where({ id: id }).delete();
-
-    return deletedUser;
   }
 }
 
