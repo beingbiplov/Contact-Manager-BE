@@ -8,7 +8,8 @@
     "build": "tsc",
     "lint:fix": "tslint --fix -c tslint.json 'src/**/*.{ts,js}' 'test/**/*.{ts,js}'",
     "prettify": "prettier --single-quote --print-width 120 --write {src,test}/**/*.ts",
-    "format:code": "run-s lint:fix prettify"
+    "format:code": "run-s lint:fix prettify",
+    "migrate:prod": "knex migrate:latest --knexfile dist/db/knexfile.js"
   },
   "keywords": [
     "typescript",
