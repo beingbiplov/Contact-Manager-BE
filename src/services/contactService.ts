@@ -141,6 +141,8 @@ export const updateContact = async (
         StatusCodes.INTERNAL_SERVER_ERROR
       );
     }
+  } else {
+    delete contactData.picture;
   }
 
   const updatedContact = await ContactModel.updateContact(contactData).then(
