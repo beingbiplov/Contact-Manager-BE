@@ -10,6 +10,7 @@ import { generatePasswordHash } from "../utils/passwordUtils";
 import CustomError from "../misc/CustomError";
 import Success from "../domain/Success";
 import { resourceFetchedSuccessMsg } from "../constants/common";
+import logger from "../misc/logger";
 
 /**
  * Get a single user by id.
@@ -47,6 +48,7 @@ export const createUser = async (
     ...user,
     password: passwordHash,
   }).catch((err) => {
+    logger.info(err);
     if (err.code == 23505) {
       throw new CustomError(
         "User with the email already exist",
