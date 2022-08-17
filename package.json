@@ -4,7 +4,8 @@
   "description": "contact-manager-app",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon",
+    "dev": "nodemon",
+    "start": "node dist/index.js",
     "build": "tsc",
     "lint:fix": "tslint --fix -c tslint.json 'src/**/*.{ts,js}' 'test/**/*.{ts,js}'",
     "prettify": "prettier --single-quote --print-width 120 --write {src,test}/**/*.ts",
