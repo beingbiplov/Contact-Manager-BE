@@ -40,7 +40,7 @@ export const authenticateUser = async (
     await RefreshToken.createRefreshToken({
       refresh_token: refreshToken,
       user_id: dataToReturn.id,
-      expires_at: new Date(Date.now() + 300000),
+      expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),
     });
 
     return {

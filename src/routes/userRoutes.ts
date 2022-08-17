@@ -2,10 +2,8 @@ import { Router } from "express";
 
 import {
   createUser,
-  getUsers,
   getUserById,
   updateUser,
-  deleteUser,
 } from "../controllers/userController";
 import AuthenticationRoutes from "./AuthenticationRoutes";
 import { deleteRefreshToken } from "../controllers/authController";
@@ -20,9 +18,7 @@ router.use(authenticate);
 
 router.delete("/logout", deleteRefreshToken);
 
-router.get("/", getUsers);
 router.get("/:id", getUserById);
 router.put("/:id", updateUser);
-router.delete("/:id", deleteUser);
 
 export default router;
