@@ -44,7 +44,7 @@ export const authenticateUser = async (
     });
 
     return {
-      data: { accessToken, refreshToken },
+      data: { accessToken, refreshToken, userData: dataToReturn },
       message: "User login successful!",
     };
   } else {
