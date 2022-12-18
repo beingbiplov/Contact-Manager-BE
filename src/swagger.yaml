@@ -1,0 +1,527 @@
+openapi: 3.0.0
+info:
+  title: contactMan API
+  version: 1.0.0
+  description: |-
+    This is a server for contactMan project. You can find the project at [https://contact-man-lf.netlify.app/](https://contact-man-lf.netlify.app/)
+    
+    Codebase:
+      - [Server](https://github.com/beingbiplov/Contact-Manager-BE)
+      - [Client](https://github.com/beingbiplov/Contact-Manager-FE)
+
+servers:
+  - url: http://localhost:5000/api
+
+tags:
+  -name: users
+  description: Everything user related.
+  -name: contacts
+  description: Everything contact releted.
+
+paths:
+  /users:
+    post:
+      tags:
+        - users
+      summary: Creates a new user.
+      description: Creates a new user with the provided email and password.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/userCreate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userData'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+      
+  /users/auth/login:
+    post:
+      tags:
+        - users
+      summary: User login
+      description: Login with valid email and password.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userLogin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/userLogin'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userLoginResponse'
+        '401':
+          $ref: '#/components/responses/LoginError'
+
+  /users/{id}:
+    get:
+      security:
+        - bearerAuth: []
+
+      tags:
+        - users
+      summary: Get user by id
+      description: Fetch user details by user id.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/dataTypes/userId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userData'
+        '401':
+          $ref: '#/components/responses/TokenError'
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - users
+      summary: Update user details.
+      description: Update user name or password.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/dataTypes/userId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/userUpdate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userData'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /users/logout:
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+        - users
+      summary: Logout user
+      description: Logout user from the system
+      responses:
+        '200':
+          $ref: '#/components/responses/200OK'
+      
+  /contacts:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - contacts
+      summary: Create new contact.
+      description: Create a new contact.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/contactCreate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/contactCreateResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - contacts
+      summary: Get contact list.
+      description: Get a list of all contacts of a user.
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/contacts'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /contacts/{id}:
+    get:
+      security:
+        - bearerAuth: []
+
+      tags:
+        - contacts
+      summary: Get contact by id
+      description: Fetch user contact by contact id.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/dataTypes/contactId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/contactData'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - contacts
+      summary: Update contact details.
+      description: Update details of a contact
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/dataTypes/contactId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/contactUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/contactUpdate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/contactCreateResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+        - contacts
+      summary: Delete a contact
+      description: Delete a contact from an id.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/dataTypes/contactId'
+      responses:
+        '200':
+          $ref: '#/components/responses/200OK'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /contacts/favorite:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - contacts
+      summary: Get favourite contact list.
+      description: Get a list of favourite contacts of a user.
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/contacts'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+
+components:
+  responses:
+      200OK:
+        description: Ok
+      BadRequest:
+        description: Bad Request
+      LoginError:
+        description: email or password did not match.
+      TokenError:
+        description: Access token is missing or invalid
+      UnauthorizedError:
+        description: Unauthorized
+      Forbidden:
+        description: Forbidden
+  
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+
+  schemas:
+    userCreate:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/dataTypes/userName'
+        email:
+          $ref: '#/components/dataTypes/email'
+        password:
+          $ref: '#/components/dataTypes/password'
+      required:
+        - name
+        - email
+        - password
+    
+    userUpdate:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/dataTypes/userName'
+        password:
+          $ref: '#/components/dataTypes/password'
+
+    userLogin:
+      type: object
+      properties:
+        email:
+          $ref: '#/components/dataTypes/email'
+        password:
+          $ref: '#/components/dataTypes/password'
+      required:
+        - email
+        - password
+
+    userData:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/dataTypes/userId'
+        name:
+          $ref: '#/components/dataTypes/userName'
+        email:
+          $ref: '#/components/dataTypes/email'
+    
+    userLoginResponse:
+      type: object
+      properties:
+        accessToken:
+          $ref: '#/components/dataTypes/accessToken'
+        refreshToken:
+          $ref: '#/components/dataTypes/refreshToken'
+        userData:
+          $ref: '#/components/schemas/userData'
+
+    contactData:
+      type: object
+      properties:
+        user_id:
+          $ref: '#/components/dataTypes/userId'
+        contact_id:
+          $ref: '#/components/dataTypes/contactId'
+        name:
+          $ref: '#/components/dataTypes/userName'
+        phone_number:
+          $ref: '#/components/dataTypes/phoneNumber'
+        phone_id:
+          $ref: '#/components/dataTypes/phoneId'
+        email:
+          $ref: '#/components/dataTypes/email'
+        is_favorite:
+          $ref: '#/components/dataTypes/isFavorite'
+        label:
+          $ref: '#/components/dataTypes/label'
+        pictute:
+          $ref: '#/components/dataTypes/picture'
+        address:
+          $ref: '#/components/dataTypes/address'
+        created_at:
+          $ref: '#/components/dataTypes/createdAt'
+
+    contacts:
+      type: array
+      items:
+        $ref: '#/components/schemas/contactData'
+    
+    contactCreate:
+      type: object
+      properties:
+          name:
+            $ref: '#/components/dataTypes/userName'
+          email:
+            $ref: '#/components/dataTypes/email'
+          is_favorite:
+            $ref: '#/components/dataTypes/isFavorite'
+          pictute:
+            $ref: '#/components/dataTypes/picture'
+          address:
+            $ref: '#/components/dataTypes/address'
+          phone:
+            type: object
+            properties:
+              phone_number:
+                $ref: '#/components/dataTypes/phoneNumber'
+              label:
+                $ref: '#/components/dataTypes/label'
+
+    contactCreateResponse:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/dataTypes/userName'
+        user_id:
+          $ref: '#/components/dataTypes/userId'
+        contact_id:
+          $ref: '#/components/dataTypes/contactId'
+        email:
+          $ref: '#/components/dataTypes/email'
+        is_favorite:
+          $ref: '#/components/dataTypes/isFavorite'
+        pictute:
+          $ref: '#/components/dataTypes/picture'
+        address:
+          $ref: '#/components/dataTypes/address'
+        phoneData:
+          type: object
+          properties:
+            phone_number:
+              $ref: '#/components/dataTypes/phoneNumber'
+            label:
+              $ref: '#/components/dataTypes/label'
+            phone_id:
+              $ref: '#/components/dataTypes/phoneId'
+
+    contactUpdate:
+      type: object
+      properties:
+          name:
+            $ref: '#/components/dataTypes/userName'
+          contact_id:
+            $ref: '#/components/dataTypes/contactId'
+          email:
+            $ref: '#/components/dataTypes/email'
+          is_favorite:
+            $ref: '#/components/dataTypes/isFavorite'
+          pictute:
+            $ref: '#/components/dataTypes/picture'
+          address:
+            $ref: '#/components/dataTypes/address'
+          phone:
+            type: object
+            properties:
+              phone_number:
+                $ref: '#/components/dataTypes/phoneNumber'
+              label:
+                $ref: '#/components/dataTypes/label'
+              phone_id: 
+                $ref: '#/components/dataTypes/phoneId'
+
+
+  dataTypes:
+    userName:
+      type: string
+      description: Full name
+      example: Jon Doe
+
+    email:
+      type: string
+      description: Email address
+      example: jondoe@email.com
+    
+    password:
+      type: string
+      description: Password
+      format: password
+      example: password
+
+    userId:
+      type: integer
+      format: int64
+      description: user id
+      example: 1
+
+    accessToken:
+        type: string
+        description: Access token
+        example: xxxx.yyyy.zzzz
+          
+    refreshToken:
+      type: string
+      description: RefreshToken
+      example: xxx.yyy.zzz
+
+    contactId:
+      type: integer
+      format: int64
+      description: contact id
+      example: 1
+    
+    createdAt:
+      type: string
+      format: date-time
+      description: Contact creation time.
+      example: "2022-12-17T12:21:45.167Z"
+
+    isFavorite:
+      type: boolean
+      description: Favourite contact
+      example: false
+    
+    label:
+      type: string
+      description: Type of phone number
+      example: cell
+    
+    phoneId:
+      type: integer
+      format: int64
+      description: Phone id.
+      example: 1
+    
+    phoneNumber:
+      type: string
+      description: Phone number.
+      example: 980000000
+
+    picture:
+      type: file
+      description: Picture
+
+    address:
+      type: string
+      description: Address
+      example: Kathmandu, Nepal
+
+
